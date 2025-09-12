@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import { useState } from "react";
-import { useGetWorkPermitsQuery, useDeleteWorkPermitMutation } from "../../services/features/workPermitApi";
 
 export default function WorkPermit() {
   const navigate = useNavigate();
@@ -9,14 +8,10 @@ export default function WorkPermit() {
   const [search, setSearch] = useState("");
   const pageSize = 10;
 
-  // API Query
-  const { data, isLoading, isError } = useGetWorkPermitsQuery();
-  const [deleteWorkPermit] = useDeleteWorkPermitMutation();
-
   const permits = data || [];
 
   const columns = [
-    { label: "Lokasi", key: "company" },
+    { label: "No Izin", key: "company" },
     { label: "Tanggal Pengajuan", key: "startDate" },
     { label: "Tanggal Mulai", key: "startDate" },
     { label: "Tanggal Selesai", key: "endDate" },
@@ -29,7 +24,7 @@ export default function WorkPermit() {
       label: "Delete",
       onClick: async () => {
         if (confirm("Delete this permit?")) {
-          await deleteWorkPermit(row.id);
+          
         }
       },
       danger: true,
