@@ -1,4 +1,5 @@
-import Pagination from "./Pagination";
+import ActionMenu from "./atoms/ActionMenu";
+import Pagination from "./atoms/Pagination";
 import Button from "./forms/Button";
 
 export default function DataTable({
@@ -23,7 +24,17 @@ export default function DataTable({
   const tableData = data?.data || [];
 
   return (
-    <>
+    <div className="p-6">
+      {/* Header */}
+      <div className="sm:flex-row sm:items-center sm:justify-between mb-4 pl-2">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
+          <p className="text-sm text-gray-600">{description}</p>
+        </div>
+      </div>
+
+      <hr className="my-3 text-gray-300" />
+
       {/* Actions & Search */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
         <div className="flex items-center justify-between w-full gap-3">
@@ -59,8 +70,11 @@ export default function DataTable({
                   {index + 1 + (currentPage - 1) * pageSize}
                 </td>
                 {columns.map((col, i) => (
-                  <td key={i} className="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">{row[col.key] || "-"}</td>
+                  <td key={i} className="px-6 py-4 text-sm text-gray-500">{row[col.key] || "-"}</td>
                 ))}
+                <td className="px-6 py-4 text-center text-sm">
+                  <ActionMenu actions={typeof actions === "function" ? actions(row) : actions} />
+                </td>
               </tr>
             )) : (
               <tr>
@@ -84,8 +98,8 @@ export default function DataTable({
         </table>
       </div>
 
-      {isLoading && <p className="text-center mt-4 text-gray-500 dark:text-gray-300">Loading...</p>}
+      {isLoading && <p className="text-center mt-4 text-gray-500">Loading...</p>}
       {isError && <p className="text-center mt-4 text-red-500">Error: {error?.data?.message || error?.error}</p>}
-    </>
+    </div>
   );
 }

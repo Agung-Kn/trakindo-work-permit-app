@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Index from './Index';
-import WorkPermit from './pages/permits/WorkPermit';
-import CreatePermit from './pages/permits/CreatePermit';
+import WorkPermit from './pages/workPermits/WorkPermit';
+import CreatePermit from './pages/workPermits/CreatePermit';
 import PublicRoute from './helpers/PublicRoute';
 import Login from './pages/Login';
 import PrivateRoute from './helpers/PrivateRoute';
