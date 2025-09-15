@@ -21,7 +21,7 @@ export default function WorkPermit() {
     startDate: formatFullDate(item.startDate),
     endDate: formatFullDate(item.endDate),
     createdAt: formatFullDate(item.createdAt),
-    status: item.status === "approved" ? "Disetujui" : item.status === "rejected" ? "Ditolak" : "Menunggu Persetujuan",
+    status: item.status === "APPROVED" ? "Disetujui" : item.status === "REJECTED" ? "Ditolak" : "Menunggu Persetujuan",
   }));
 
   const modifiedQuery = {

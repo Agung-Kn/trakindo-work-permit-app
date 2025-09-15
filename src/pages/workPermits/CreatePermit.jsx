@@ -95,7 +95,7 @@ export default function CreatePermit() {
   const [currentStep, setCurrentStep] = useState(1);
   const [createWorkPermit, { isLoading }] = useCreateWorkPermitMutation();
 
-  const { register, handleSubmit, control } = useForm({
+  const { register, handleSubmit, control, formState: { errors } } = useForm({
     defaultValues: {
       company: "",
       branch: "",
@@ -232,7 +232,8 @@ export default function CreatePermit() {
                 id="company"
                 name="company"
                 label="Nama Perusahaan"
-                register={register}  
+                register={register}
+                error={errors.company?.message}
                 required
               />
 
@@ -240,7 +241,8 @@ export default function CreatePermit() {
                 id="branch"
                 name="branch"
                 label="Cabang Lokasi Pekerjaan"
-                register={register}  
+                register={register}
+                error={errors.branch?.message}
                 required
               />
 
@@ -248,7 +250,8 @@ export default function CreatePermit() {
                 id="pic"
                 name="pic"
                 label="Penanggung Jawab Pekerjaan"
-                register={register}  
+                register={register}
+                error={errors.pic?.message}
                 required
               />
 
@@ -256,7 +259,8 @@ export default function CreatePermit() {
                 id="location"
                 name="location"
                 label="Lokasi Pekerjaan"
-                register={register}  
+                register={register}
+                error={errors.location?.message}
                 required
               />
 
@@ -264,7 +268,8 @@ export default function CreatePermit() {
                 id="department"
                 name="department"
                 label="Departemen"
-                register={register}  
+                register={register}
+                error={errors.department?.message}
                 required
               />
 
@@ -272,7 +277,8 @@ export default function CreatePermit() {
                 id="owner"
                 name="owner"
                 label="Pemilik Pekerjaan"
-                register={register}  
+                register={register}
+                error={errors.owner?.message}
                 required
               />
 
@@ -281,7 +287,8 @@ export default function CreatePermit() {
                 name="startDate"
                 label="Tanggal Mulai" 
                 type="date"
-                register={register}  
+                register={register}
+                error={errors.startDate?.message}
                 required
               />
 
@@ -290,7 +297,8 @@ export default function CreatePermit() {
                 name="endDate"
                 label="Tanggal Selesai" 
                 type="date"
-                register={register}  
+                register={register}
+                error={errors.endDate?.message}
                 required
               />
             </div>

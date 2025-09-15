@@ -17,7 +17,7 @@ export default function Input({
   defaultImage,
   required = false,
   disabled = false,
-  register,         // ✅ tambahan
+  register,
 }) {
   const [preview, setPreview] = useState(defaultImage || null);
 
@@ -70,7 +70,6 @@ export default function Input({
             type="file"
             required={required}
             disabled={disabled}
-            // ✅ spread register agar react-hook-form memantau file input
             {...(register ? register(name || id) : {})}
             className="block w-full text-sm text-gray-900 
                        file:mr-4 file:rounded-md file:border-0 
@@ -101,7 +100,6 @@ export default function Input({
               onChange={onChange}
               required={required}
               disabled={disabled}
-              // ✅ spread register agar react-hook-form memantau input text
               {...(register ? register(name || id) : {})}
               className={`block min-w-0 grow bg-white 
                           px-1 placeholder:text-gray-400 
