@@ -6,7 +6,6 @@ import Swal from "sweetalert2";
 import { useApprovePermitMutation, useGetPermitsQuery } from "../../services/features/managePermitApi";
 
 export default function ManagePermit() {
-  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const pageSize = 10;

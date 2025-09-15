@@ -30,7 +30,7 @@ export default function Navbar() {
           {/* Desktop Menu Links */}
           <div className="hidden md:flex space-x-8">
             <a href="/" className="hover:bg-purple-800 px-3 py-2 rounded-md">Dashboard</a>
-            <a href="/" className="hover:bg-purple-800 px-3 py-2 rounded-md">Work Permit A</a>
+            <a href="/permit-a" className="hover:bg-purple-800 px-3 py-2 rounded-md">Work Permit A</a>
             <a href="#" className="hover:bg-purple-800 px-3 py-2 rounded-md">Work Permit B</a>
             <a href="#" className="hover:bg-purple-800 px-3 py-2 rounded-md">Work Permit Spesific</a>
           </div>

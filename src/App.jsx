@@ -17,12 +17,12 @@ function App() {
 
           <Route element={<PrivateRoute />}>
             <Route element={<Index />}>
-              <Route path="/" element={<WorkPermit />} />
+              <Route path="/permit-a" element={<WorkPermit />} />
               <Route path="/create" element={<CreatePermit />} />
             </Route>
 
             <Route element={<Index />}>
-              <Route path="/permits" element={<ManagePermit />} />
+              <Route path="/" element={<ManagePermit />} />
               <Route path="/create" element={<CreatePermit />} />
             </Route>
           </Route>
