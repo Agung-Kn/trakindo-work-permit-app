@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-
 export default function PPEFieldGroup({ options, register }) {
   const [othersChecked, setOthersChecked] = useState(false);
 

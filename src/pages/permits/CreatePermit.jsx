@@ -1,30 +1,11 @@
-import { useState } from "react";
+import { use, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import Input from "../../components/forms/Input";
 import DynamicForm from "../../components/DynamicForm";
 import DynamicFieldGroup from "../../components/DynamicFieldGroup";
 import PPEFieldGroup from "../../components/PPEFieldGroup";
-
-export default function CreatePermit() {
-  const { register, control, handleSubmit } = useForm({
-    defaultValues: {
-      company: "",
-      branch: "",
-      pic: "",
-      location: "",
-      department: "",
-      owner: "",
-      startDate: "",
-      endDate: "",
-      equipments: [{ name: "", qty: "" }],
-      machines: [{ name: "", qty: "" }],
-      materials: [{ name: "", qty: "" }],
-    },
-  });
-
-  const equipmentField = useFieldArray({ control, name: "equipments" });
-  const machineField = useFieldArray({ control, name: "machines" });
-  const materialField = useFieldArray({ control, name: "materials" });
+import { useCreateWorkPermitMutation } from "../../services/features/workPermitApi"
+import { useNavigate } from "react-router-dom";
 
   const questions = [ 
     { 
@@ -109,6 +90,34 @@ export default function CreatePermit() {
     "Radio Komunikasi / Handy Talking (HT)" 
   ];
 
+export default function CreatePermit() {
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [createWorkPermit, { isLoading }] = useCreateWorkPermitMutation();
+
+  const { register, handleSubmit, control } = useForm({
+    defaultValues: {
+      company: "",
+      branch: "",
+      pic: "",
+      location: "",
+      department: "",
+      owner: "",
+      startDate: "",
+      endDate: "",
+      equipments: [{ name: "", qty: "" }],
+      machines: [{ name: "", qty: "" }],
+      materials: [{ name: "", qty: "" }],
+      ppes: [],
+      emergencies: [],
+      checklists: [],
+    }
+  })
+
+  const equipmentField = useFieldArray({ control, name: "equipments" });
+  const machineField = useFieldArray({ control, name: "machines" });
+  const materialField = useFieldArray({ control, name: "materials" });
+
   const steps = [
     { id: 1, title: "Informasi Umum" },
     { id: 2, title: "Daftar Periksa" },
@@ -116,10 +125,49 @@ export default function CreatePermit() {
     { id: 4, title: "Review & Submit" },
   ];
 
-  const [currentStep, setCurrentStep] = useState(1);
+  const onSubmit = async (data) => {
+    try {
+      const ppes = PPEOptions.map((name) => {
+        const existing = data.ppes.find((p) => p.name === name);
+        return { name, selected: existing?.selected || false };
+      });
 
-  const onSubmit = (data) => {
-    console.log("Form Submitted:", data);
+      const emergencies = equipmentOptions.map((name) => {
+        const existing = data.emergencies.find((e) => e.name === name);
+        return { name, selected: existing?.selected || false };
+      });
+
+      const checklists = data.checklists?.map((item) => ({
+        question: item.question,
+        answer: item.answer,
+        additional: item.additional || undefined,
+      }));
+
+      const payload = {
+        company: data.company,
+        branch: data.branch,
+        pic: data.pic,
+        location: data.location,
+        department: data.department,
+        owner: data.owner,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        equipments: data.equipments,
+        machines: data.machines,
+        materials: data.materials,
+        ppes,
+        emergencies,
+        checklists,
+      };
+
+      await createWorkPermit(payload).unwrap();
+      alert("Work Permit berhasil dibuat!");
+
+      navigate("/")
+    } catch (err) {
+      console.error(err);
+      alert("Gagal membuat Work Permit.");
+    }
   };
 
   const nextStep = () => setCurrentStep((s) => Math.min(s + 1, steps.length));
@@ -180,14 +228,71 @@ export default function CreatePermit() {
           <>
             <h2 className="text-xl font-semibold text-gray-800 border-b pb-3 mb-6 border-gray-200">Informasi Umum</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <Input label="Nama Perusahaan" {...register("company")} />
-              <Input label="Cabang Lokasi Pekerjaan" {...register("branch")} />
-              <Input label="Penanggung Jawab Pekerjaan" {...register("pic")} />
-              <Input label="Lokasi Pekerjaan" {...register("location")} />
-              <Input label="Departemen" {...register("department")} />
-              <Input label="Pemilik Pekerjaan" {...register("owner")} />
-              <Input label="Tanggal Mulai" type="date" {...register("startDate")} />
-              <Input label="Tanggal Selesai" type="date" {...register("endDate")} />
+              <Input 
+                id="company"
+                name="company"
+                label="Nama Perusahaan"
+                register={register}  
+                required
+              />
+
+              <Input 
+                id="branch"
+                name="branch"
+                label="Cabang Lokasi Pekerjaan"
+                register={register}  
+                required
+              />
+
+              <Input 
+                id="pic"
+                name="pic"
+                label="Penanggung Jawab Pekerjaan"
+                register={register}  
+                required
+              />
+
+              <Input
+                id="location"
+                name="location"
+                label="Lokasi Pekerjaan"
+                register={register}  
+                required
+              />
+
+              <Input
+                id="department"
+                name="department"
+                label="Departemen"
+                register={register}  
+                required
+              />
+
+              <Input 
+                id="owner"
+                name="owner"
+                label="Pemilik Pekerjaan"
+                register={register}  
+                required
+              />
+
+              <Input
+                id="startDate"
+                name="startDate"
+                label="Tanggal Mulai" 
+                type="date"
+                register={register}  
+                required
+              />
+
+              <Input 
+                id="endDate"
+                name="endDate"
+                label="Tanggal Selesai" 
+                type="date"
+                register={register}  
+                required
+              />
             </div>
           </>
         )}
@@ -195,7 +300,7 @@ export default function CreatePermit() {
         {currentStep === 2 && (
           <>
             <h2 className="text-xl font-semibold text-gray-800 border-b pb-3 mb-6 border-gray-200">Daftar Periksa</h2>
-            <DynamicForm questions={questions} />
+            <DynamicForm questions={questions} control={control} register={register} />
           </>
         )}
 
@@ -257,7 +362,7 @@ export default function CreatePermit() {
           {currentStep < steps.length ? (
             <button
               type="button"
-              onClick={nextStep}
+              onClick={(e) => { e.preventDefault(); nextStep(); }}
               className="ml-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Next
@@ -267,7 +372,7 @@ export default function CreatePermit() {
               type="submit"
               className="ml-auto px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
             >
-              Submit Permit
+              {isLoading ? "Submitting..." : "Submit Permit"}
             </button>
           )}
         </div>

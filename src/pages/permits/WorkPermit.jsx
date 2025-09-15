@@ -8,7 +8,7 @@ export default function WorkPermit() {
   const [search, setSearch] = useState("");
   const pageSize = 10;
 
-  const permits = data || [];
+  const permits = [];
 
   const columns = [
     { label: "No Izin", key: "company" },
@@ -42,17 +42,7 @@ export default function WorkPermit() {
             onActionClick={() => navigate("/create")}
             columns={columns}
             actions={actions}
-            queryHook={{
-              data: permits,
-              pagination: {
-                total: permits.length,
-                page: currentPage,
-                limit: pageSize,
-                totalPages: Math.ceil(permits.length / pageSize),
-              },
-              isLoading,
-              isError,
-            }}
+            queryHook={permits}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             search={search}

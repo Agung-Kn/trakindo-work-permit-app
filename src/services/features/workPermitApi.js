@@ -8,7 +8,7 @@ export const workPermitApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     createWorkPermit: builder.mutation({
       query: (body) => ({
-        url: '/work-permits/create',
+        url: '/public/work-permits/create',
         method: 'POST',
         body,
       }),

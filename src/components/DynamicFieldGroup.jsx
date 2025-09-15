@@ -4,7 +4,6 @@ import Input from "./forms/Input";
 export default function DynamicFieldGroup({ label, name, register, fields, append, remove }) {
   return (
     <div className="space-y-2">
-      {/* Header dengan tombol tambah */}
       <div className="flex items-center gap-3">
         <h3 className="font-semibold text-gray-700">{label}</h3>
         <button
@@ -17,7 +16,6 @@ export default function DynamicFieldGroup({ label, name, register, fields, appen
         </button>
       </div>
 
-      {/* List Input */}
       <div className="space-y-2">
         {fields.map((item, index) => (
           <div
@@ -27,14 +25,16 @@ export default function DynamicFieldGroup({ label, name, register, fields, appen
             <div className="col-span-7">
               <Input
                 label="Nama"
-                {...register(`${name}.${index}.name`)}
+                name={`${name}.${index}.name`}
+                register={register}
               />
             </div>
             <div className="col-span-4">
               <Input
                 label="Jumlah / Qty"
+                name={`${name}.${index}.qty`}
                 type="number"
-                {...register(`${name}.${index}.qty`)}
+                register={register}
               />
             </div>
             {fields.length > 1 && (

@@ -17,6 +17,7 @@ export default function Input({
   defaultImage,
   required = false,
   disabled = false,
+  register,         // ✅ tambahan
 }) {
   const [preview, setPreview] = useState(defaultImage || null);
 
@@ -41,7 +42,7 @@ export default function Input({
   }, [value, type, defaultImage]);
 
   return (
-    <div className={`${className}`}>
+    <div className={className}>
       {label && (
         <label
           htmlFor={id}
@@ -63,22 +64,21 @@ export default function Input({
 
       <div className="mt-2">
         {type === "file" ? (
-          <div className="flex flex-col gap-2">
-            <input
-              id={id}
-              name={name || id}
-              type="file"
-              onChange={onChange}
-              required={required}
-              disabled={disabled}
-              className="block w-full text-sm text-gray-900 
-                         file:mr-4 file:rounded-md file:border-0 
-                         file:bg-indigo-600 file:px-4 file:py-2 
-                         file:text-sm file:font-semibold file:text-white 
-                         hover:file:bg-indigo-700 
-                         focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-            />
-          </div>
+          <input
+            id={id}
+            name={name || id}
+            type="file"
+            required={required}
+            disabled={disabled}
+            // ✅ spread register agar react-hook-form memantau file input
+            {...(register ? register(name || id) : {})}
+            className="block w-full text-sm text-gray-900 
+                       file:mr-4 file:rounded-md file:border-0 
+                       file:bg-indigo-600 file:px-4 file:py-2 
+                       file:text-sm file:font-semibold file:text-white 
+                       hover:file:bg-indigo-700 
+                       focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+          />
         ) : (
           <div
             className={`flex items-center rounded-md bg-white pl-3 pr-3 outline-1 -outline-offset-1 
@@ -87,15 +87,7 @@ export default function Input({
                         disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {prefix && (
-              <div
-                className={`shrink-0 text-gray-500 select-none ${
-                  size === "lg"
-                    ? "text-lg"
-                    : size === "sm"
-                    ? "text-sm"
-                    : "text-base"
-                }`}
-              >
+              <div className={`shrink-0 text-gray-500 select-none ${sizeClasses[size]}`}>
                 {prefix}
               </div>
             )}
@@ -109,21 +101,15 @@ export default function Input({
               onChange={onChange}
               required={required}
               disabled={disabled}
+              // ✅ spread register agar react-hook-form memantau input text
+              {...(register ? register(name || id) : {})}
               className={`block min-w-0 grow bg-white 
                           px-1 placeholder:text-gray-400 
                           focus:outline-none ${sizeClasses[size]}`}
             />
 
             {suffix && (
-              <div
-                className={`shrink-0 text-gray-500 ${
-                  size === "lg"
-                    ? "text-lg"
-                    : size === "sm"
-                    ? "text-sm"
-                    : "text-base"
-                }`}
-              >
+              <div className={`shrink-0 text-gray-500 ${sizeClasses[size]}`}>
                 {suffix}
               </div>
             )}
@@ -131,11 +117,8 @@ export default function Input({
         )}
 
         {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
-
         {!error && helperText && (
-          <p className="mt-1 text-sm text-gray-500">
-            {helperText}
-          </p>
+          <p className="mt-1 text-sm text-gray-500">{helperText}</p>
         )}
       </div>
     </div>
