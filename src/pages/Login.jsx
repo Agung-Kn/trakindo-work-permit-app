@@ -1,13 +1,15 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { setCredentials } from "../services/authSlice";
-import { useLoginMutation } from "../services/features/authApi";
+import { setCredentials, setProfile } from "../services/authSlice";
+import { useLoginMutation, useLazyProfileQuery } from "../services/features/authApi";
 
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [login, { isLoading, error }] = useLoginMutation();
+  const [triggerProfile] = useLazyProfileQuery();
   const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
@@ -22,6 +24,9 @@ export default function Login() {
     try {
       const result = await login(formData).unwrap();
       dispatch(setCredentials(result));
+
+      const profileRes = await triggerProfile().unwrap();
+      dispatch(setProfile(profileRes.data));
       navigate("/");
     } catch (err) {
       console.error("Login failed:", err);

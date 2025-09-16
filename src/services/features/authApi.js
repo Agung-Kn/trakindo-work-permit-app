@@ -18,7 +18,13 @@ export const authApi = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    profile: builder.query({
+      query: () => ({
+        url: "/auth/me",
+        method: "GET",
+      }),
+    }),
   })
 });
 
-export const { useLoginMutation, useRefreshMutation } = authApi;
+export const { useLoginMutation, useRefreshMutation, useLazyProfileQuery } = authApi;

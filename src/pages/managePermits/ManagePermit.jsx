@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import DataTable from "../../components/DataTable";
 import { useState } from "react";
 import { formatFullDate } from "../../helpers/dateFormatter";

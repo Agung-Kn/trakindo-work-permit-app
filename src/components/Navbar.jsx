@@ -1,7 +1,8 @@
 import { Fragment, useState } from "react";
-import { BellIcon, MagnifyingGlassIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, NavLink } from "react-router-dom";
+import { logout } from "../services/authSlice";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -9,11 +10,9 @@ function classNames(...classes) {
 
 export default function Navbar() {
   const profile = useSelector((state) => state.auth.profile);
+  const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.reload();
-  };
+  const handleLogout = () => dispatch(logout());
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -24,15 +23,23 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="flex-shrink-0 font-bold text-xl">
-            Trakindo
+            <Link to="/">Trakindo</Link>
           </div>
 
           {/* Desktop Menu Links */}
           <div className="hidden md:flex space-x-8">
-            <a href="/" className="hover:bg-purple-800 px-3 py-2 rounded-md">Dashboard</a>
-            <a href="/permit-a" className="hover:bg-purple-800 px-3 py-2 rounded-md">Work Permit A</a>
-            <a href="#" className="hover:bg-purple-800 px-3 py-2 rounded-md">Work Permit B</a>
-            <a href="#" className="hover:bg-purple-800 px-3 py-2 rounded-md">Work Permit Spesific</a>
+             <NavLink to="/" className={({ isActive }) => `px-3 py-2 rounded-md hover:bg-purple-800 ${ isActive ? "bg-purple-900" : "" }`}>
+                Dashboard
+            </NavLink>
+             <NavLink to="/permit-a" className="hover:bg-purple-800 px-3 py-2 rounded-md">
+              Work Permit A
+            </NavLink>
+            <NavLink to="/permit-b" className="hover:bg-purple-800 px-3 py-2 rounded-md">
+              Work Permit B
+            </NavLink>
+            <NavLink to="/permit-specific" className="hover:bg-purple-800 px-3 py-2 rounded-md">
+              Work Permit Specific
+            </NavLink>
           </div>
 
           {/* Right side */}
